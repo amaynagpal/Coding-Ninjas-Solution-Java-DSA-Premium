@@ -38,48 +38,28 @@ false
 import java.util.*;
 public class Solution {
 
-
-        public static int maximum(BinaryTreeNode<Integer> root){
-        if(root==null){
-            return Integer.MIN_VALUE;
-        }
-        return Math.max(root.data,Math.max(maximum(root.left),maximum(root.right)));
-    }
-    
-    public static int minimum(BinaryTreeNode<Integer> root){
-        if(root==null){
-            return Integer.MAX_VALUE;
-        }
-        return Math.min(root.data,Math.min(minimum(root.left),minimum(root.right)));
+    public static boolean isBST(BinaryTreeNode<Integer> root) {
+        return isBSTUtil(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
-	public static boolean isBST(BinaryTreeNode<Integer> root) {
+    private static boolean isBSTUtil(BinaryTreeNode<Integer> root, int minValue, int maxValue) {
+        if (root == null) {
+            return true;
+        }
 
-		/* Your class should be named Solution
-		 * Don't write main().
-		 * Don't read input, it is passed as function argument.
-		 * Return output and don't print it.
-	 	 * Taking input and printing output is handled automatically.
-        */
-        if(root==null){
-            return true;
-        }
-        int min=maximum(root.left);
-        int max=minimum(root.right);
-        if(root.data<=min){
+        // Check if the current node's value is within the valid range
+        if (root.data <= minValue || root.data > maxValue) {
             return false;
         }
-        if(root.data>max){
-            return false;
-        }
-        boolean lans=isBST(root.left);
-        boolean rans=isBST(root.right);
-        if(lans&&rans){
-            return true;
-        }
-        else{
-            return false;
-        }
-	}
+
+        // Check the left and right subtrees recursively with updated min and max values
+        boolean leftBST = isBSTUtil(root.left, minValue, root.data);
+        boolean rightBST = isBSTUtil(root.right, root.data, maxValue);
+
+        // Return true only if both left and right subtrees are BSTs
+        return leftBST && rightBST;
+    }
+
+    // Other methods, if any...
+
 }
-
